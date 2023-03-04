@@ -22,8 +22,15 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, User $id)
+    public function show(Request $request, User $user)
     {
-        return Weather::forecast(request('search'), request()->except('search'));
+        $userGeoLocation = "$user->latitude,$user->longitude";
+
+        return response()->json([
+            'data' => [
+                'user'    => UserResource::make($user),
+                'weather' => Weather::forecast($userGeoLocation)
+            ]
+        ]);
     }
 }
